@@ -6,6 +6,7 @@
   <title>الاستعلام عن الثانوية المنقول لها</title>
   <script src="students-data.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.1/vanilla-tilt.min.js"></script>
   <style>
     :root {
       --bg-dark: #090a0f;
@@ -485,6 +486,7 @@
             <button class="ghostBtn" id="clearBtn">مسح</button>
             <button class="ghostBtn" id="printBtn">طباعة النتيجة</button>
             <button class="ghostBtn" id="saveImageBtn">حفظ كصورة</button>
+            <button class="ghostBtn" id="whatsappBtn" style="border-color: #25D366; color: #25D366; text-shadow: 0 0 10px rgba(37,211,102,0.4);">مشاركة واتساب 💬</button>
           </div>
 
           <div class="notFound" id="notFound">
@@ -659,6 +661,31 @@
         console.error("Error saving image:", err);
         alert("حدث خطأ أثناء حفظ الصورة.");
       });
+    });
+
+    const whatsappBtn = document.getElementById("whatsappBtn");
+    whatsappBtn.addEventListener("click", () => {
+      if(document.getElementById("studentResult").style.display === "none") {
+        alert("الرجاء الاستعلام عن طالب أولاً قبل المشاركة.");
+        return;
+      }
+      const studentName = document.getElementById("studentName").textContent;
+      const targetSchool = document.getElementById("targetSchool").textContent;
+      const nationalId = document.getElementById("nationalId").textContent;
+      
+      const text = `مرحباً! لقد تم قبولي وتوجيهي إلى (${targetSchool}) 🎉\nالاسم: ${studentName}\nرقم الهوية: ${nationalId}\nعقبال أعلى المراتب!`;
+      const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`;
+      window.open(url, '_blank');
+    });
+
+    // Initialize 3D Tilt Effect on the result card
+    VanillaTilt.init(document.querySelector(".resultCard"), {
+      max: 10,
+      speed: 400,
+      glare: true,
+      "max-glare": 0.15,
+      gyroscope: true,
+      scale: 1.02
     });
 
     showEmpty();
